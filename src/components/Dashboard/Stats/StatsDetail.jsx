@@ -23,23 +23,16 @@ export const StatsDetail = ({
       )}
       onClick={isClickable ? () => navigate("/orders") : undefined}
     >
-      {/* Colored top border */}
       <div
         className="absolute top-0 left-0 w-full h-1"
         style={{ backgroundColor: color }}
       />
-
       <CardContent>
-        {/* Title and icon */}
         <div className="flex items-center gap-2 mb-2">
           {icon}
           <p className="text-sm text-muted-foreground">{title}</p>
         </div>
-
-        {/* Value */}
         <h3 className="text-2xl font-bold mb-3">{value}</h3>
-
-        {/* Progress bar and percentage */}
         <div className="flex items-center gap-2">
           <Progress
             value={progress}
