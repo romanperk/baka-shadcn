@@ -15,6 +15,7 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 
 const NavBar = () => {
@@ -58,8 +59,10 @@ const NavBar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary ${
-                  location.pathname === item.path ? "text-primary" : ""
+                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors hover:text-primary ${
+                  location.pathname === item.path
+                    ? "bg-gray-200 dark:bg-muted font-medium"
+                    : ""
                 }`}
               >
                 {item.icon}
@@ -86,17 +89,17 @@ const NavBar = () => {
         direction="right"
         className="md:hidden"
       >
-        <DrawerContent className="fixed right-0 h-full w-[80%] max-w-[300px] rounded-l-lg border-l">
-          <DrawerHeader className="border-b">
-            <DrawerTitle className="font-semibold">Navigation</DrawerTitle>
+        <DrawerContent className="w-[80%] rounded-l-lg border-l">
+          <DrawerHeader className="border-b flex flex-row items-center justify-between">
+            <div>
+              <DrawerTitle className="font-semibold">Navigation</DrawerTitle>
+              <DrawerDescription>
+                Select a page to navigate to
+              </DrawerDescription>
+            </div>
             <DrawerClose asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute right-4 top-4"
-                onClick={toggleMenu}
-              >
-                <X className="h-4 w-4" />
+              <Button variant="ghost" size="icon" onClick={toggleMenu}>
+                <X className="h-5 w-5" />
               </Button>
             </DrawerClose>
           </DrawerHeader>
@@ -105,10 +108,11 @@ const NavBar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors hover:bg-muted ${
-                  location.pathname === item.path ? "bg-muted" : ""
+                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors hover:text-primary ${
+                  location.pathname === item.path
+                    ? "bg-gray-200 dark:bg-muted font-medium"
+                    : ""
                 }`}
-                onClick={toggleMenu}
               >
                 {item.icon}
                 {item.label}

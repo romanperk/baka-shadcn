@@ -19,11 +19,7 @@ export const FormNavigation = ({
       >
         Back
       </Button>
-      <Button
-        onClick={handleNext}
-        disabled={!isFormValid}
-        className={isLastStep ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
-      >
+      <Button onClick={handleNext} disabled={!isFormValid}>
         {isLastStep ? "Submit Order" : "Next"}
       </Button>
     </div>
