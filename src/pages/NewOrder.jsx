@@ -97,7 +97,7 @@ const NewOrder = () => {
           {activeStep === 0 && (
             <Button variant="default" onClick={() => navigate("/orders")}>
               <ArrowLeft className="h-4 w-4" />
-              {downMd ? "Overview" : "Table Overview"}
+              {downMd ? "Overview" : "Orders Overview"}
             </Button>
           )}
         </CardHeader>
