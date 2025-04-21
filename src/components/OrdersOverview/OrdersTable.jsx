@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pencil,
   Trash2,
@@ -25,6 +25,15 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export const OrdersTable = ({
   orders,
@@ -37,6 +46,12 @@ export const OrdersTable = ({
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 10;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterText, statusFilter]);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -92,6 +107,16 @@ export const OrdersTable = ({
         return "text-foreground";
     }
   };
+
+  const totalPages = Math.ceil(sortedOrders.length / ordersPerPage);
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const showNoData =
     orders.length === 0 || (orders.length > 0 && filteredOrders.length === 0);
@@ -186,7 +211,7 @@ export const OrdersTable = ({
               </TableCell>
             </TableRow>
           ) : (
-            sortedOrders.map((order) => (
+            currentOrders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>{order.id}</TableCell>
                 <TableCell>
@@ -236,6 +261,95 @@ export const OrdersTable = ({
           )}
         </TableBody>
       </Table>
+      {!showNoData && totalPages > 1 && (
+        <div className="mt-4 flex justify-end">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={prevPage}
+                  className="cursor-pointer"
+                  aria-disabled={currentPage === 1}
+                />
+              </PaginationItem>
+
+              {currentPage > 2 && (
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => paginate(1)}
+                    className="cursor-pointer"
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {currentPage > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => paginate(currentPage - 1)}
+                    className="cursor-pointer"
+                  >
+                    {currentPage - 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              <PaginationItem>
+                <PaginationLink
+                  isActive
+                  onClick={() => paginate(currentPage)}
+                  className="cursor-pointer"
+                >
+                  {currentPage}
+                </PaginationLink>
+              </PaginationItem>
+
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => paginate(currentPage + 1)}
+                    className="cursor-pointer"
+                  >
+                    {currentPage + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              {currentPage < totalPages - 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {currentPage < totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => paginate(totalPages)}
+                    className="cursor-pointer"
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={nextPage}
+                  className="cursor-pointer"
+                  aria-disabled={currentPage === totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };
